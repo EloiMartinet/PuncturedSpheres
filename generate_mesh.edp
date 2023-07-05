@@ -1,0 +1,62 @@
+/*
+ * Code associated with the paper SPHERICAL CAPS DO NOT ALWAYS MAXIMIZE NEUMANN
+ * EIGENVALUES ON THE SPHERE by DORIN BUCUR, RICHARD LAUGESEN, ELOI MARTINET AND MICKAEL NAHON.
+ * Generates a mesh according to the construction of the paper.
+ */
+
+load "msh3"
+
+/* Get parameters */
+string meshName    = "PuncturedSphere.mesh"; // The name of the output mesh 
+real epsilon       = 0.01*pi;  /* The radius of the holes */
+real aperture      = 2.4883; /* The aperture of the (full) spherical cap */
+real thetaExtremum = 1.9556;  // The angle for which the first eigenfunction reaches its max (t_max in the paper)
+
+int n  = 4; // Number of holes (except the one of the south pole)
+real totalDisksArea = 2*n*pi*(1-cos(epsilon)); // Total disks area
+real correctedaperture = acos(cos(aperture)-totalDisksArea/(2*pi)); // Compensate the mass we have lost by closing the hole at the south pole a bit
+
+int nDiscretSide = 100; 
+int nDiscretCircle = 4*nDiscretSide*epsilon;
+
+border circles(t=0, 2*pi; i){
+  real yc = pi/n + (2*pi/n)*i;
+  real xc = thetaExtremum-pi/2;
+
+  x = xc + epsilon*cos(t); 
+  y = yc + epsilon*sin(t)/cos(x);
+
+  label=10;
+}
+
+int[int] NS(n);
+int[int] NS2(n);
+for(int i=0; i<n; i++){
+  NS[i] = -nDiscretCircle;
+}
+
+border haut(t=correctedaperture-pi/2,-pi/2) {  x=t;      y=2*pi; label=3;  }
+border droite(t=0, 2*pi)                    {  x=correctedaperture-pi/2;   y=t;    label=10;  }
+border bas(t=-pi/2,correctedaperture-pi/2)  {  x=t;      y=0;    label=1;  }
+border gauche(t=2*pi,0)                     {  x=-pi/2;  y=t;    label=4;  }
+
+// Mesh 2D
+real a = correctedaperture/pi;
+
+mesh Th = buildmesh(haut(int(a*nDiscretSide))
+                  + gauche(2*nDiscretSide)
+                  + bas(int(a*nDiscretSide))
+                  + droite(2*nDiscretSide)
+                  + circles(NS));
+
+// A parametrization of a sphere
+func f1 = cos(x)*cos(y);
+func f2 = cos(x)*sin(y);
+func f3 = sin(x);
+
+// Sphere
+meshS ThS = movemesh23(Th, transfo=[f1, f2, f3]);
+plot(ThS, wait=1);
+
+savemesh(ThS, meshName);
+
