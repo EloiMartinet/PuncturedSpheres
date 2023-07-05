@@ -1,6 +1,6 @@
 # Instructions 
 
-This repository is associated with the paper SPHERICAL CAPS DO NOT ALWAYS MAXIMIZE NEUMANN EIGENVALUES ON THE SPHERE by DORIN BUCUR, RICHARD LAUGESEN, ELOI MARTINET and MICKAEL NAHON. It aims at provinding the meshes used in the paper alongside two codes written in FreeFem++ allowing to generate a mesh and compute it's associated eigenvalue. The names of the folders corresponds to the value of the aperture $\varepsilon$ of the small holes. The name of each mesh corresonds to the angle $\theta$ defined such that $|B(\theta)| = |\Om_\varepsilon(\theta)|$.
+This repository is associated with the paper SPHERICAL CAPS DO NOT ALWAYS MAXIMIZE NEUMANN EIGENVALUES ON THE SPHERE by DORIN BUCUR, RICHARD LAUGESEN, ELOI MARTINET and MICKAEL NAHON. It aims at provinding the meshes used in the paper alongside two codes written in FreeFem++ allowing to generate a mesh and compute it's associated eigenvalue. The names of the folders corresponds to the value of the aperture $\varepsilon$ of the small holes. The name of each mesh corresonds to the angle $\theta$ defined such that $|B(\theta)| = |\Omega_\varepsilon(\theta)|$.
 
 To vizualize a mesh, you can use medit :
 ```
